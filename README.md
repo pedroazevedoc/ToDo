@@ -1,64 +1,195 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Projeto Docker
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este projeto utiliza Docker para simplificar o gerenciamento de containers e serviços do ambiente de desenvolvimento laravel utilizando `MYSQL`, `PHPMYADMIN` e `NGINX`. Este `README` fornece instruções sobre como usar os comandos disponíveis e os pré-requisitos necessários para executar o projeto.
 
-## About Laravel
+## Pré-requisitos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Antes de começar, certifique-se de ter os seguintes pré-requisitos instalados em sua máquina:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Docker**: Ferramenta de containerização. [Instalação do Docker](https://docs.docker.com/get-docker/)
+- **Docker Compose**: Ferramenta para definir e executar aplicativos Docker multi-containers. [Instalação do Docker Compose](https://docs.docker.com/compose/install/)
+sudo - **Make**: Ferramenta para simplificar execução de multi-comandos, para obter em sua máquina:
+```bash
+sudo sudo apt-get install make
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Configuração Inicial
 
-## Learning Laravel
+1. **Clone o repositório na pasta raíz do seu projeto**:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```bash
+git clone https://github.com/raulntjj/docker-development-environment
+cd docker-development-environment
+mv * ../
+cd ..
+rm -r docker-development-environment --force
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Ao executar este bloco de comando os arquivos de configuração estarão em seus devidos locais para que funcione corretamente.
 
-## Laravel Sponsors
+2. **Configure o .env.docker se necessário, está no diretório "docker" (Opcional)**:
+```bash
+# Por padrão:
+NGINX_PORT=8989
+MYADMIN_PORT=8888
+DB_PORT=3307
+DB_NAME=sys
+DB_PASS=root
+```
+3. **Defina uma .env.example (Se não possuir), e verifique as credênciais do banco (OBRIGATÓRIO POSSUIR UMA .env.example)**:
+```bash
+# Configure conforme o que você colocou no .env.docker, caso não tenha alterado,
+# deve estar desta forma
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=sys
+DB_USERNAME=root
+DB_PASSWORD=root
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+4. **Contrua os containers, para isso utilize:**:
 
-### Premium Partners
+```bash
+sudo make build
+```
+Ao realizar estes passos, seu ambiente estará configurado e instalado, com phpMyAdmin na porta 8888, nginx na porta 8989, e com mysql na porta 3306. 
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+## Comandos Disponíveis
 
-## Contributing
+### Construir e Iniciar Containers
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+sudo make build
+```
+- Descrição: Executa o script build.sh, inicia os containers em segundo plano e executa o script entrypoint.sh.
+- Uso: Ideal para a configuração inicial do ambiente e para construir e iniciar todos os serviços necessários.
 
-## Code of Conduct
+### Parar e Remover Containers
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+sudo make kill
+```
+- Descrição: Para e remove os containers e executa uma limpeza do sistema Docker.
+- Uso: Use para parar e remover todos os containers e limpar o sistema.
 
-## Security Vulnerabilities
+### Iniciar Containers
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+sudo make start
+```
+- Descrição: Inicia os containers em segundo plano.
+- Uso: Use para iniciar os containers que estão parados.
 
-## License
+### Parar Containers
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+sudo make stop
+```
+- Descrição: Para todos os containers.
+- Uso: Use para parar todos os containers em execução.
+
+### Reiniciar Containers
+
+```bash
+sudo make restart
+```
+- Descrição: Reinicia todos os containers.
+- Uso: Use para reiniciar todos os containers em execução.
+
+### Visualizar Logs
+
+```bash
+sudo make logs
+```
+- Descrição: Mostra os logs dos containers em tempo real.
+- Uso: Use para monitorar a saída dos logs dos containers.
+
+### Acessar o Shell do Container 'app'
+
+```bash
+sudo make shell
+```
+- Descrição: Acessa o shell interativo do container app.
+- Uso: Use para realizar manutenção ou diagnósticos diretamente no container app.
+
+### Acessar o Shell do Container 'queue'
+
+```bash
+sudo make queue-shell
+```
+- Descrição: Acessa o shell interativo do container queue.
+- Uso: Use para realizar manutenção ou diagnósticos diretamente no container queue.
+
+### Rodar Testes
+
+```bash
+sudo make test
+```
+- Descrição: Executa os testes definidos no projeto Laravel.
+- Uso: Use para rodar os testes automatizados da aplicação.
+
+### Executar Migrações
+
+```bash
+sudo make migrate
+```
+- Descrição: Executa as migrações do banco de dados.
+- Uso: Use para aplicar alterações na estrutura do banco de dados.
+
+### Instalar Dependências
+
+```bash
+sudo make install
+```
+- Descrição: Instala as dependências do Composer e gera a chave da aplicação.
+- Uso: Use para instalar todas as dependências e configurar a chave da aplicação.
+
+### Atualizar Dependências
+
+```bash
+sudo make update
+```
+- Descrição: Atualiza as dependências do Composer.
+- Uso: Use para atualizar as dependências para suas versões mais recentes.
+
+### Limpar Volumes e Imagens Órfãs
+
+```bash
+sudo make clean
+```
+- Descrição: Remove volumes e imagens Docker órfãs que não estão mais em uso.
+- Uso: Use para liberar espaço no disco removendo dados não utilizados.
+
+### Derrubar Containers
+
+```bash
+sudo make down
+```
+- Descrição: Derruba todos os containers e redes associadas.
+- Uso: Use para parar e remover os containers, mas mantendo volumes e redes persistentes.
+
+### Subir Containers em Background
+
+```bash
+sudo make up
+```
+- Descrição: Inicia todos os containers em segundo plano.
+- Uso: Use para subir os containers em modo detach.
+
+### Resetar Ambiente
+
+```bash
+sudo make reset
+```
+- Descrição: Derruba e remove volumes e redes associadas, além de realizar uma limpeza completa.
+- Uso: Use para uma limpeza completa e reinicialização do ambiente.
+
+### Contribuição
+
+Se você deseja contribuir para este projeto, por favor, siga estas diretrizes:
+
+    Faça um fork do repositório.
+    Crie uma nova branch para sua feature ou correção.
+    Faça suas alterações e teste-as.
+    Envie um pull request com uma descrição clara das mudanças.

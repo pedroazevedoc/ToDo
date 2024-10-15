@@ -55,7 +55,6 @@ class TaskController extends Controller
         $request_data = $request->only('title', 'due_date', 'category_id', 'description');
 
         $request_data['is_done'] = $request->is_done ? true : false;
-        // dd($request_data);
 
         $task = Task::find($request->id);
         if (!$task) {
@@ -64,6 +63,14 @@ class TaskController extends Controller
         $task->update($request_data);
         $task->save();
         return redirect(route('home'));
+    }
+
+    // atualiza a tarefa ao clicar no check na listagem
+    public function update(Request $request){
+        $task = Task::findOrFail($request->taskId);
+        $task->is_done = $request->status;
+        $task->save();
+        return ['success' => true];
     }
 
     public function delete(Request $request) {

@@ -1,4 +1,4 @@
-<x-layout pageTitle="Projeto Pedro - Editar Tarefa">
+<x-layout pageTitle="ToDo - Editar Tarefa">
 
     <x-slot name="btn">
         <a href="{{route('home')}}" class="btn btn-primary">

@@ -1,4 +1,4 @@
-<x-layout pageTitle="Projeto Pedro - Criar Tarefa">
+<x-layout pageTitle="ToDo - Registre-se">
 
     <x-slot name="btn">
         <a href="{{route('login')}}" class="btn btn-primary">
@@ -8,6 +8,15 @@
 
     <section id="task_section">
         <h1>Registrar-se</h1>
+
+        @if($errors->any())
+            <ul class="alert alert-error">
+                @foreach($errors->all() as $error)
+                    <li>{{$error}}</li>
+                @endforeach
+            </ul>
+        @endif
+
         <form method="POST" action="{{route('user.register_action')}}">
             @csrf
             <x-form.text_input name="name" label="Nome" placeholder="Seu nome" required="required"/>
